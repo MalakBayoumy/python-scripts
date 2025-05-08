@@ -8,7 +8,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
-
+import joblib
+import os
 
 def load_config():
     initialize(config_path=".", version_base=None)
@@ -80,6 +81,12 @@ def main():
 
     test_preds = pipeline.predict(X_test)
     print("Test predictions complete.")
+
+     # save pipeline to pkl file
+    os.makedirs(cfg.model.model_path, exist_ok=True) 
+    model_file_path = cfg.model.trained_model_path + ".pkl"
+    joblib.dump(pipeline, model_file_path)
+    print(f"Model saved to: {model_file_path}")
 
 
 if __name__ == "__main__":

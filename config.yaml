@@ -19,14 +19,14 @@ preprocessing:
 model:
   model_name: "RandomForest"
   model_path: models
-  trained_model_path: ${pipeline.model.model_path}/${pipeline.model.model_name}
+  trained_model_path: ${model.model_path}/${model.model_name}
   params:
     n_estimators: 100
     max_depth: 10
     random_state: 42
 
 evaluate:
-  model_name: ${pipeline.model.model_name}
-  model_path: ${pipeline.model.model_path}
-  trained_model_path:  ${pipeline.model.trained_model_path}
+  model_name: ${model.model_name}
+  model_path: ${model.model_path}
+  trained_model_path:  ${model.trained_model_path}
   reports_path: reports
