@@ -1,0 +1,10 @@
+stages:
+  train_model:
+    cmd: dvc.yaml --cmd "python scripts/main.py --in data/train.csv --out models/RandomForest.pkl"
+    deps:
+    - data/train.csv.dvc
+    - scripts/main.py
+    params:
+    - model.model_name
+    outs:
+    - models/RandomForest.pkl
