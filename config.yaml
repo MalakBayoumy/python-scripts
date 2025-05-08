@@ -1,0 +1,32 @@
+
+data:
+  raw_data_path: data/raw
+  processed_data_path: data/processed
+  train: data/raw/train.csv
+  test: data/raw/test.csv
+  id_column: PassengerId
+  features: ["Pclass", "Sex", "SibSp", "Parch", "Age", "Fare", "Embarked"]
+  target_column: Survived
+  test_size: 0.2
+  random_state: 42
+
+preprocessing:
+  num_features: ["Age", "Fare", "SibSp", "Parch"]
+  cat_features: ["Pclass", "Sex", "Embarked"]
+  num_strategy: "median"
+  cat_strategy: "most_frequent"
+
+model:
+  model_name: "RandomForest"
+  model_path: models
+  trained_model_path: ${pipeline.model.model_path}/${pipeline.model.model_name}
+  params:
+    n_estimators: 100
+    max_depth: 10
+    random_state: 42
+
+evaluate:
+  model_name: ${pipeline.model.model_name}
+  model_path: ${pipeline.model.model_path}
+  trained_model_path:  ${pipeline.model.trained_model_path}
+  reports_path: reports
