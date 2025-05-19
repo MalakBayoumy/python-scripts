@@ -1,0 +1,23 @@
+schema: '2.0'
+stages:
+  train_model:
+    cmd: python main.py --in data/raw/train.csv --out models/RandomForest.pklnano
+    deps:
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 2309cc5f04782ed9bb6016d9f4e381cf
+      size: 61194
+      isexec: true
+    - path: main.py
+      hash: md5
+      md5: 3f3fdef608b5d423aec78fd942a86938
+      size: 2873
+      isexec: true
+    params:
+      params.yaml:
+        model.model_name: RandomForest
+    outs:
+    - path: models/RandomForest.pkl
+      hash: md5
+      md5: 60fbf1d2141f3316737dc5e8ad15a208
+      size: 1556360
