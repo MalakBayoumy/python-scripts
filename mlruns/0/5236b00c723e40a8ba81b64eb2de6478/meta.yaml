@@ -1,0 +1,15 @@
+artifact_uri: file:///teamspace/studios/this_studio/mlruns/0/5236b00c723e40a8ba81b64eb2de6478/artifacts
+end_time: 1747629832485
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5236b00c723e40a8ba81b64eb2de6478
+run_name: ambitious-smelt-284
+run_uuid: 5236b00c723e40a8ba81b64eb2de6478
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747629828579
+status: 3
+tags: []
+user_id: malakbayoumy41

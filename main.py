@@ -10,6 +10,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 import joblib
 import os
+import mlflow
+import mlflow.sklearn
+import dagshub
+
 
 def load_config():
     initialize(config_path=".", version_base=None)
@@ -57,7 +61,13 @@ def build_pipeline(cfg, model_name):
     ])
 
 
+
 def main():
+    # Initialize DagsHub + MLflow integration
+    dagshub.init(repo_owner='malak.bayoumy41',
+                 repo_name='python-scripts',
+                 mlflow=True)
+
     cfg = load_config()
 
     train, test = load_data(cfg)
@@ -72,12 +82,27 @@ def main():
     )
 
     pipeline = build_pipeline(cfg, cfg.model.model_name)
+
+    # Start MLflow run
+    mlflow.start_run()
+
+    # Log params from config (example)
+    mlflow.log_param("model_name", cfg.model.model_name)
+    mlflow.log_param("n_estimators", cfg.model.params.n_estimators)
+    mlflow.log_param("max_depth", cfg.model.params.max_depth)
+    mlflow.log_param("random_state", cfg.model.params.random_state)
+
+
     pipeline.fit(X_train, y_train)
     y_pred = pipeline.predict(X_val)
+    acc = accuracy_score(y_val, y_pred)
 
     print(f"\nModel: {cfg.model.model_name}")
-    print("Accuracy:", accuracy_score(y_val, y_pred))
+    print("Accuracy:", acc)
     print("Classification Report:\n", classification_report(y_val, y_pred))
+
+    # Log metrics
+    mlflow.log_metric("accuracy", acc)
 
     test_preds = pipeline.predict(X_test)
     print("Test predictions complete.")
@@ -87,6 +112,12 @@ def main():
     model_file_path = cfg.model.trained_model_path + ".pkl"
     joblib.dump(pipeline, model_file_path)
     print(f"Model saved to: {model_file_path}")
+
+    # Log model artifact to MLflow
+    mlflow.sklearn.log_model(pipeline, "model")
+
+    # End MLflow run
+    mlflow.end_run()
 
 
 if __name__ == "__main__":

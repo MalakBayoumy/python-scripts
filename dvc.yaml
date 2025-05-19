@@ -1,10 +1,14 @@
 stages:
   train_model:
-    cmd: dvc.yaml --cmd "python scripts/main.py --in data/train.csv --out models/RandomForest.pkl"
+    cmd: python main.py 
     deps:
-    - data/train.csv.dvc
-    - scripts/main.py
+    - data/raw/train.csv
+    - main.py
+    - params.yaml
     params:
     - model.model_name
+    - model.params.n_estimators
+    - model.params.max_depth
+    - model.params.random_state
     outs:
     - models/RandomForest.pkl
