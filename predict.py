@@ -25,4 +25,4 @@ sample_input = pd.DataFrame({
 
 # Predict
 predictions = model.predict(sample_input)
-print(predictions)
+print("The prediction is",predictions)
