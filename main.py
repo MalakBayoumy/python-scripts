@@ -116,6 +116,25 @@ def main():
     # Log model artifact to MLflow
     mlflow.sklearn.log_model(pipeline, "model")
 
+    from mlflow.tracking import MlflowClient
+
+    client = MlflowClient()
+    run_id = mlflow.active_run().info.run_id
+    model_name = "titanic"
+
+    # Create registered model if it doesn't exist
+    try:
+        client.create_registered_model(model_name)
+    except Exception:
+        pass  # Model already exists
+
+    model_uri = f"runs:/{run_id}/model"
+    client.create_model_version(
+        name=model_name,
+        source=model_uri,
+        run_id=run_id
+    )
+
     # End MLflow run
     mlflow.end_run()
 

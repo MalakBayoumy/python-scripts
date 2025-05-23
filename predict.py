@@ -9,7 +9,7 @@ dagshub.init(repo_owner='malak.bayoumy41',
              mlflow=True)
 
 # Load the model from the Production stage
-model_uri = "models:/titanic/2"
+model_uri = "models:/titanic/latest"
 model = mlflow.pyfunc.load_model(model_uri)
 
 # Sample input
