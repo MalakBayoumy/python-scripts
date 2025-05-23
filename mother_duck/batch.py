@@ -5,27 +5,16 @@ import dagshub
 from prefect import flow, task
 import os
 
-# Environment variables already exported — just use them
+# Initialize DagsHub + MLflow tracking (make sure DAGSHUB_TOKEN is exported)
+dagshub.init(repo_owner='malak.bayoumy41',
+             repo_name='python-scripts',
+             mlflow=True)
+
+# DuckDB connection string with MotherDuck token (make sure MOTHERDUCK_TOKEN is exported)
 MOTHERDUCK_TOKEN = os.getenv("MOTHERDUCK_TOKEN")
-DAGSHUB_TOKEN = os.getenv("DAGSHUB_TOKEN")
 DUCKDB_CONN = f"md:titanic_test ?motherduck_token={MOTHERDUCK_TOKEN}"
-MODEL_NAME = "titanic"
-MODEL_VERSION = "2"
+
 PREDICTION_TABLE = "predictions"
-
-# Authenticate with DagsHub
-dagshub.auth.add_app_token(DAGSHUB_TOKEN)
-from mlflow.tracking import MlflowClient
-
-client = MlflowClient()
-
-# Get a specific registered model if you know the name
-try:
-    model = client.get_registered_model("titanic")
-    print("Model found:", model.name)
-except Exception as e:
-    print("Model not found:", str(e))
-
 
 @task
 def extract() -> pd.DataFrame:
@@ -37,6 +26,8 @@ def extract() -> pd.DataFrame:
 
 @task
 def predict(df: pd.DataFrame) -> pd.DataFrame:
+    MODEL_NAME = "titanic"
+    MODEL_VERSION = "latest" 
     model_uri = f"models:/{MODEL_NAME}/{MODEL_VERSION}"
     loaded_model = mlflow.pyfunc.load_model(model_uri)
 
